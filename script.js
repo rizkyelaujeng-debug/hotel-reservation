@@ -623,7 +623,7 @@ if(bookBtn) {
         let customer, room, reservation;
         if (editIndex !== null) {
             const resLama = hotel.getAllReservations()[editIndex];
-            customer = new Customer(resLama.getCustomer().getIdUser(), finalCustomerName, phone, 0);
+            customer = new Customer(resLama.getCustomer().getIdUser(), finalCustomerName, phone);
             room = new Room(roomNumber, roomType, roomPrice, roomAssets[roomType].imgUrl); 
             reservation = new Reservation(resLama.getIdReservation(), customer, room, days);
             
@@ -631,7 +631,7 @@ if(bookBtn) {
             editIndex = null;
             bookBtn.innerText = "Book Reservation";
         } else {
-            customer = new Customer(`CUST-${Date.now()}`, finalCustomerName, phone, 0);
+            customer = new Customer(`CUST-${Date.now()}`, finalCustomerName, phone);
             room = new Room(roomNumber, roomType, roomPrice, roomAssets[roomType].imgUrl); 
             reservation = new Reservation(`RES-${Date.now()}`, customer, room, days);
             hotel.tambahReservation(reservation);

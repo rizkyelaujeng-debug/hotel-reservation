@@ -56,7 +56,7 @@ if (logoutBtn) {
 }
 
 // ==========================================
-// 3. LOGIKA NAVIGASI SIDEBAR (SPA BEHAVIOR)
+// 3. LOGIKA NAVIGASI SIDEBAR & MOBILE RESPONSIVE
 // ==========================================
 const navItems = document.querySelectorAll('.menu-item');
 const pageTitle = document.getElementById('pageTitle');
@@ -66,6 +66,23 @@ const secBookings = document.getElementById('sectionBookings');
 const secRooms = document.getElementById('sectionRooms');
 const secFood = document.getElementById('sectionFood');
 const secSettings = document.getElementById('sectionSettings');
+
+// Fitur Mobile Menu Sidebar
+const mainSidebar = document.getElementById('mainSidebar');
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const closeMenuBtn = document.getElementById('closeMenuBtn');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+function toggleMobileMenu() {
+    if (mainSidebar && sidebarOverlay) {
+        mainSidebar.classList.toggle('show');
+        sidebarOverlay.classList.toggle('show');
+    }
+}
+
+if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMobileMenu);
+if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleMobileMenu);
 
 function hideAllSections() {
     if(secDashboard) secDashboard.style.display = 'none';
@@ -104,6 +121,11 @@ navItems.forEach(item => {
             pageTitle.innerText = this.innerText;
             if(secDashboard) secDashboard.style.display = 'block'; 
         }
+
+        // Auto-close menu on mobile after clicking an item
+        if (window.innerWidth <= 768 && mainSidebar.classList.contains('show')) {
+            toggleMobileMenu();
+        }
     });
 });
 
@@ -111,6 +133,7 @@ const newReservationBtn = document.getElementById('newReservationBtn');
 if (newReservationBtn) {
     newReservationBtn.addEventListener('click', () => {
         document.getElementById('menuRooms').click(); 
+        if (window.innerWidth <= 768 && mainSidebar.classList.contains('show')) toggleMobileMenu();
     });
 }
 

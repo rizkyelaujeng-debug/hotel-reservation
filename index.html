@@ -58,7 +58,10 @@
     <div id="appDashboard" style="display: none;">
         <div class="dashboard-layout">
             
-            <aside class="sidebar">
+            <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+            <aside class="sidebar" id="mainSidebar">
+                <button id="closeMenuBtn" class="close-menu-btn"><i class="fa-solid fa-xmark"></i></button>
                 <div class="sidebar-header">
                     <h2><i class="fa-solid fa-hotel"></i> Grand Savora</h2>
                     <p>HOTEL & RESTO</p>
@@ -82,7 +85,10 @@
             <main class="main-area">
                 
                 <header class="topbar">
-                    <h1 id="pageTitle">Overview Dashboard</h1>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button id="mobileMenuBtn" class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
+                        <h1 id="pageTitle">Overview Dashboard</h1>
+                    </div>
                     <div class="topbar-right">
                         <div class="profile-avatar">AD</div>
                     </div>
@@ -124,18 +130,20 @@
                                     <h3>Recent Bookings</h3>
                                     <a href="#" id="dashViewAll" style="font-size:0.75rem; color:#64748b; font-weight:bold; letter-spacing:1px; text-decoration:none;">VIEW ALL</a>
                                 </div>
-                                <table class="lux-table">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>GUEST</th>
-                                            <th>ROOM</th>
-                                            <th>STAY</th>
-                                            <th>STATUS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="dashRecentBookingsBody"></tbody>
-                                </table>
+                                <div style="overflow-x: auto;">
+                                    <table class="lux-table" style="min-width: 500px;">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>GUEST</th>
+                                                <th>ROOM</th>
+                                                <th>STAY</th>
+                                                <th>STATUS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dashRecentBookingsBody"></tbody>
+                                    </table>
+                                </div>
                             </div>
                             
                             <div class="dash-occupancy">
@@ -155,17 +163,17 @@
                         </div>
 
                         <div class="dash-bottom-grid">
-                             <div class="dash-img-box"><img src="./img/deluxe.jpg" alt="Deluxe Room"></div>
-                             <div class="dash-quote-box">
-                                 <i class="fa-solid fa-water" style="color: #d4af37; font-size: 1.5rem; margin-bottom: 20px;"></i>
-                                 <h2>"A sanctuary where comfort meets elegance, and every guest is treated with excellence."</h2>
-                                 <p>— THE GRAND SAVORA PROMISE —</p>
-                             </div>
+                            <div class="dash-img-box"><img src="./img/deluxe.jpg" alt="Deluxe Room"></div>
+                            <div class="dash-quote-box">
+                                <i class="fa-solid fa-water" style="color: #d4af37; font-size: 1.5rem; margin-bottom: 20px;"></i>
+                                <h2>"A sanctuary where comfort meets elegance, and every guest is treated with excellence."</h2>
+                                <p>— THE GRAND SAVORA PROMISE —</p>
+                            </div>
                         </div>
                     </div>
 
                     <div id="sectionBookings" style="display: none;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
                             <p class="breadcrumb" style="margin-bottom: 0;">MANAGEMENT PORTAL &gt; <strong>RESERVATIONS</strong></p>
                             <div class="search-box">
                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -293,8 +301,7 @@
                         </div>
                     </div>
 
-                </div>
-            </main>
+                </div> </main>
         </div>
     </div>
 
