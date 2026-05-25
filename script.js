@@ -20,24 +20,56 @@ const formatRupiah = (angka) => {
 };
 
 // ==========================================
-// 0. CUSTOM ALERT POP-UP LOGIC
+// 0. CUSTOM ALERT & CONFIRM POP-UP LOGIC
 // ==========================================
 const customAlertOverlay = document.getElementById("customAlertOverlay");
 const customAlertMessage = document.getElementById("customAlertMessage");
 const customAlertOkBtn = document.getElementById("customAlertOkBtn");
+
+const customConfirmOverlay = document.getElementById("customConfirmOverlay");
+const customConfirmTitle = document.getElementById("customConfirmTitle");
+const customConfirmMessage = document.getElementById("customConfirmMessage");
+const customConfirmOkBtn = document.getElementById("customConfirmOkBtn");
+const customConfirmCancelBtn = document.getElementById("customConfirmCancelBtn");
+
+let confirmCallback = null;
 
 function showCustomAlert(message) {
     if (customAlertMessage && customAlertOverlay) {
         customAlertMessage.innerText = message;
         customAlertOverlay.style.display = "flex";
     } else {
-        alert(message); // Fallback aman
+        alert(message);
+    }
+}
+
+function showCustomConfirm(title, messageHTML, onConfirm) {
+    if (customConfirmOverlay) {
+        customConfirmTitle.innerText = title;
+        customConfirmMessage.innerHTML = messageHTML; 
+        confirmCallback = onConfirm;
+        customConfirmOverlay.style.display = "flex";
+    } else {
+        if(confirm("Tindakan ini memerlukan konfirmasi. Lanjutkan?")) onConfirm();
     }
 }
 
 if (customAlertOkBtn) {
     customAlertOkBtn.addEventListener("click", () => {
         customAlertOverlay.style.display = "none";
+    });
+}
+if (customConfirmCancelBtn) {
+    customConfirmCancelBtn.addEventListener("click", () => {
+        customConfirmOverlay.style.display = "none";
+        confirmCallback = null;
+    });
+}
+if (customConfirmOkBtn) {
+    customConfirmOkBtn.addEventListener("click", () => {
+        customConfirmOverlay.style.display = "none";
+        if (confirmCallback) confirmCallback();
+        confirmCallback = null;
     });
 }
 
@@ -49,10 +81,7 @@ function updateDashboardStats() {
     const allOrders = hotel.getAllOrders();
 
     let activeRev = 0;
-    
-    let countStandard = 0;
-    let countDeluxe = 0;
-    let countSuite = 0;
+    let countStandard = 0, countDeluxe = 0, countSuite = 0;
 
     allReservations.forEach(res => {
         activeRev += res.hitungBiaya();
@@ -82,7 +111,6 @@ function updateDashboardStats() {
     const barStandard = document.getElementById('barStandard');
     const barDeluxe = document.getElementById('barDeluxe');
     const barSuite = document.getElementById('barSuite');
-    
     const lblStandard = document.getElementById('lblStandard');
     const lblDeluxe = document.getElementById('lblDeluxe');
     const lblSuite = document.getElementById('lblSuite');
@@ -175,8 +203,10 @@ const updateRoomUI = () => {
     calculateSummaryTotal(); 
 };
 
-updateRoomUI();
-roomTypeSelect.addEventListener("change", updateRoomUI);
+if (roomTypeSelect) {
+    updateRoomUI();
+    roomTypeSelect.addEventListener("change", updateRoomUI);
+}
 const daysInput = document.getElementById("days");
 if(daysInput) daysInput.addEventListener("input", calculateSummaryTotal);
 
@@ -344,7 +374,7 @@ if(orderItemsList) {
 }
 
 // ==========================================
-// 4. RENDER RESERVATIONS
+// 4. RENDER RESERVATIONS & CHECKOUT LOGIC
 // ==========================================
 function renderReservations(searchQuery = "") {
     if(!output) return;
@@ -438,7 +468,7 @@ function renderReservations(searchQuery = "") {
                     </div>
                     <div class="bd-info-item">
                         <span class="bd-label">SUITE SELECTION</span>
-                        <span class="bd-value"><i class="fa-solid fa-bed"></i> ${displayType}, Ocean View</span>
+                        <span class="bd-value"><i class="fa-solid fa-bed"></i> ${displayType}</span>
                     </div>
                     <div class="bd-info-item">
                         <span class="bd-label">DURATION OF STAY</span>
@@ -463,6 +493,7 @@ function renderReservations(searchQuery = "") {
         `;
     });
 
+    // MENGUBAH PROSES CHECKOUT DENGAN CUSTOM CONFIRM DAN RECEIPT
     document.querySelectorAll(".delete-btn").forEach(button => {
         button.addEventListener("click", function() {
             const indexToDelete = parseInt(this.getAttribute("data-index"));
@@ -474,18 +505,43 @@ function renderReservations(searchQuery = "") {
             const totalKamar = res.hitungBiaya();
 
             const tagihanFinal = totalKamar + totalMakanan;
-            const pembayaran = new Payment(`PAY-${Date.now()}`, "Cash / Debit");
-            
-            const isConfirmed = confirm(`Has the payment been received and do you want to proceed with Checkout?`);
+            const namaTamu = res.getCustomer().getNama().split(" | Req: ")[0];
+            const tipeKamar = res.getRoom().getType() === "Luxury Suite" ? "Luxury Suite" : res.getRoom().getType() + " Room";
 
-            if (isConfirmed) {
+            // Membuat tampilan struk di dalam modal
+            const receiptHTML = `
+                <div class="receipt-box">
+                    <p style="margin-bottom: 5px;"><strong>Guest:</strong> ${namaTamu}</p>
+                    <p style="margin-bottom: 5px;"><strong>Room:</strong> #${res.getRoom().getIdRoom()} (${tipeKamar})</p>
+                    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+                    <div class="receipt-row">
+                        <span>Room (${res.getDurasi()} Nights)</span>
+                        <span>${formatRupiah(totalKamar)}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Dining & Services</span>
+                        <span>${formatRupiah(totalMakanan)}</span>
+                    </div>
+                    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 10px 0;">
+                    <div class="receipt-total">
+                        <span>Grand Total</span>
+                        <span style="color: #d4af37;">${formatRupiah(tagihanFinal)}</span>
+                    </div>
+                </div>
+                <p style="text-align: center;">Has the payment been received and do you want to proceed with Checkout?</p>
+            `;
+            
+            // Panggil Custom Confirm kita
+            showCustomConfirm("Checkout Receipt", receiptHTML, () => {
                 historicalRevenue += tagihanFinal;
                 historicalCustomerCount += 1;
 
                 hotel.hapusData(indexToDelete); 
                 renderReservations(); 
-                showCustomAlert(pembayaran.prosesPembayaran()); // Menggunakan Custom Alert
-            }
+                
+                const pembayaran = new Payment(`PAY-${Date.now()}`, "Cash / Debit");
+                showCustomAlert(pembayaran.prosesPembayaran());
+            });
         });
     });
 
@@ -523,7 +579,7 @@ if (searchInputBookings) {
 }
 
 // ==========================================
-// 6. SUBMIT BOOKING (DENGAN CUSTOM ALERT)
+// 6. SUBMIT BOOKING 
 // ==========================================
 if(bookBtn) {
     bookBtn.addEventListener("click", () => {
@@ -552,7 +608,6 @@ if(bookBtn) {
             return; 
         }
 
-        // Validasi Double Booking
         const isRoomAlreadyTaken = hotel.getAllReservations().some((res, idx) => {
             if (editIndex !== null && idx === editIndex) return false;
             return res.getRoom().getIdRoom() === roomNumber;
@@ -598,7 +653,7 @@ if(bookBtn) {
 }
 
 // ==========================================
-// 7. SUBMIT FOOD ORDER (DENGAN CUSTOM ALERT)
+// 7. SUBMIT FOOD ORDER 
 // ==========================================
 const orderFoodBtn = document.getElementById("orderFoodBtn");
 if(orderFoodBtn) {
@@ -633,6 +688,37 @@ if(orderFoodBtn) {
         
         showCustomAlert("Order successfully placed!");
         document.getElementById("menuBookings").click();
+    });
+}
+
+// ==========================================
+// 8. FITUR RESET SYSTEM (MENGGUNAKAN CUSTOM CONFIRM)
+// ==========================================
+const btnResetSystem = document.getElementById("btnResetSystem");
+if(btnResetSystem) {
+    btnResetSystem.addEventListener("click", () => {
+        // Gunakan layout peringatan bahaya di dalam Modal Konfirmasi
+        const warningHTML = `
+            <div style="text-align: center;">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: #ef4444; margin-bottom: 15px;"></i>
+                <p style="color: #b91c1c; font-weight: bold; margin-bottom: 10px;">DANGER ZONE</p>
+                <p>Are you absolutely sure you want to delete ALL reservations, revenue, and customer history?</p>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;">This action cannot be undone.</p>
+            </div>
+        `;
+
+        showCustomConfirm("Reset System Data", warningHTML, () => {
+            historicalRevenue = 0;
+            historicalCustomerCount = 0;
+            
+            hotel.reservations = []; 
+            hotel.orders = [];
+            
+            updateDashboardStats();
+            renderReservations();
+            
+            showCustomAlert("System has been successfully reset!");
+        });
     });
 }
 
