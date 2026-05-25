@@ -3,79 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Savora Hotel & Resto</title>
+    <title>Grand Savora Hotel & Resto - Admin Panel</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <h1>Grand Savora Hotel & Resto</h1>
-
-    <div class="container">
-
-        <div class="form-card">
-            <h2>Book Room</h2>
-
-            <div id="roomPreviewContainer" class="preview-container">
-                <img id="roomPreview" src="./img/standard.jpg" alt="Room Preview">
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2><i class="fa-solid fa-hotel"></i> Grand Savora</h2>
+                <p>ADMIN PORTAL</p>
             </div>
-
-            <div class="form-group">
-                <input type="text" id="customerName" placeholder="Customer Name">
-                <input type="text" id="customerPhone" placeholder="Phone Number">
+            <div class="login-body">
+                <input type="text" id="loginUsername" placeholder="Username">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <p id="loginError" class="login-error" style="display: none;">Username atau Password salah!</p>
+                <button id="loginBtnSubmit" class="btn-login">Login</button>
             </div>
-
-            <div class="form-group">
-                <input type="number" id="customerPoints" placeholder="Points">
-                <input type="number" id="roomNumber" placeholder="Room Number">
-            </div>
-
-            <div class="form-group">
-                <select id="roomType">
-                    <option value="Standard">Standard Room</option>
-                    <option value="Deluxe">Deluxe Room</option>
-                    <option value="Suite">Suite Room</option>
-                </select>
-                <input type="text" id="roomPrice" placeholder="Room Price" readonly>
-            </div>
-            
-            <input type="number" id="days" placeholder="How many days of stay">
-
-            <button id="bookBtn">
-                Book Now
-            </button>
         </div>
+    </div>
 
-        <div class="form-card" style="border-top: 3px solid #10b981;">
-            <h2>In-Room Dining Experience</h2>
-
-            <div id="foodPreviewContainer" class="preview-container">
-                <img id="foodPreview" src="./img/dininginexp.jpg" alt="In Room Dining Experience">
-            </div>
-
-            <select id="selectCustomerOrder">
-                <option value="">-- Select Customer / Room --</option>
-            </select>
-
-            <div class="form-group">
-                <select id="foodMenu">
-                    <option value="">-- Select Menu Item --</option>
-                </select>
-                <input type="text" id="foodPrice" placeholder="Food Price" readonly>
-            </div>
+    <div id="appDashboard" style="display: none;">
+        <div class="dashboard-layout">
             
-            <input type="number" id="foodQty" placeholder="Quantity">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2><i class="fa-solid fa-hotel"></i> Grand Savora</h2>
+                    <p>HOTEL & RESTO</p>
+                </div>
 
-            <button id="orderFoodBtn">
-                Add to Order
-            </button>
+                <nav class="sidebar-menu">
+                    <a href="#" class="menu-item active" id="menuDashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                    <a href="#" class="menu-item" id="menuBookings"><i class="fa-solid fa-calendar-check"></i> Bookings</a>
+                    <a href="#" class="menu-item" id="menuRooms"><i class="fa-solid fa-bed"></i> Rooms</a>
+                    <a href="#" class="menu-item" id="menuFood"><i class="fa-solid fa-utensils"></i> Food Order</a>
+                    <a href="#" class="menu-item" id="menuSettings"><i class="fa-solid fa-gear"></i> Settings</a>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <button id="newReservationBtn" class="btn-new-reservation">NEW RESERVATION</button>
+                    <a href="#" class="menu-item-small"><i class="fa-regular fa-circle-question"></i> Support</a>
+                    <a href="#" class="menu-item-small" id="logoutBtn" style="cursor: pointer;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+                </div>
+            </aside>
+
+            <main class="main-area">
+                
+                <header class="topbar">
+                    <h1 id="pageTitle">Overview Dashboard</h1>
+                    <div class="topbar-right">
+                        <div class="profile-avatar">AD</div>
+                    </div>
+                </header>
+
+                <div class="content-canvas" id="mainContent">
+                    
+                    <div id="sectionDashboard">
+                        <div class="dash-header-lux">
+                            <p class="page-subtitle-lux" style="margin-bottom: 25px;">Welcome back. The coast is calm today, with high occupancy projected for the upcoming weekend cycle.</p>
+                        </div>
+
+                        <div class="dash-stats-grid">
+                            <div class="stat-card-lux">
+                                <div class="stat-icon-lux"><i class="fa-solid fa-users"></i> <span class="stat-trend positive">LIVE</span></div>
+                                <div class="stat-label-lux">TOTAL CUSTOMERS</div>
+                                <div class="stat-value-lux" id="dashTotalCustomers">0</div>
+                            </div>
+                            <div class="stat-card-lux">
+                                <div class="stat-icon-lux"><i class="fa-solid fa-bed"></i> <span class="stat-trend neutral">LIVE</span></div>
+                                <div class="stat-label-lux">AVAILABLE ROOMS</div>
+                                <div class="stat-value-lux"><span id="dashAvailableRooms">520</span> <span class="stat-sub-val">/ 520</span></div>
+                            </div>
+                            <div class="stat-card-lux">
+                                <div class="stat-icon-lux"><i class="fa-solid fa-ticket"></i> <span class="stat-trend positive">LIVE</span></div>
+                                <div class="stat-label-lux">ACTIVE RESERVATIONS</div>
+                                <div class="stat-value-lux" id="dashActiveReservations">0</div>
+                            </div>
+                            <div class="stat-card-lux">
+                                <div class="stat-icon-lux"><i class="fa-solid fa-wallet"></i> <span class="stat-trend positive">LIVE</span></div>
+                                <div class="stat-label-lux">TOTAL REVENUE</div>
+                                <div class="stat-value-lux" id="dashTotalRevenue">Rp 0</div>
+                            </div>
+                        </div>
+
+                        <div class="dash-main-grid">
+                            <div class="dash-recent-bookings">
+                                <div class="dash-box-header">
+                                    <h3>Recent Bookings</h3>
+                                    <a href="#" id="dashViewAll" style="font-size:0.75rem; color:#64748b; font-weight:bold; letter-spacing:1px; text-decoration:none;">VIEW ALL</a>
+                                </div>
+                                <table class="lux-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>GUEST</th>
+                                            <th>ROOM</th>
+                                            <th>STAY</th>
+                                            <th>STATUS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dashRecentBookingsBody">
+                                        </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="dash-occupancy">
+                                <h3>Occupancy Tracker</h3>
+                                <p style="font-size: 0.8rem; color:#94a3b8; font-style: italic; margin-bottom: 20px;">Live active rooms by category</p>
+                                <div class="dummy-chart">
+                                    <div class="bar" id="barStandard" style="height: 5%; background: #e2e8f0; width: 25%;"></div>
+                                    <div class="bar" id="barDeluxe" style="height: 5%; background: #e2e8f0; width: 25%;"></div>
+                                    <div class="bar" id="barSuite" style="height: 5%; background: #d4af37; width: 25%;"></div>
+                                </div>
+                                <div class="dummy-chart-labels" style="justify-content: space-around;">
+                                    <span>STANDARD <span id="lblStandard">(0)</span></span>
+                                    <span>DELUXE <span id="lblDeluxe">(0)</span></span>
+                                    <span style="color: #d4af37;">LUXURY <span id="lblSuite">(0)</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dash-bottom-grid">
+                             <div class="dash-img-box"><img src="./img/deluxe.jpg" alt="Deluxe Room"></div>
+                             <div class="dash-quote-box">
+                                 <i class="fa-solid fa-water" style="color: #d4af37; font-size: 1.5rem; margin-bottom: 20px;"></i>
+                                 <h2>"A sanctuary where every detail is curated for the discerning traveler."</h2>
+                                 <p>— THE GRAND SAVORA PROMISE —</p>
+                             </div>
+                        </div>
+                    </div>
+
+                    <div id="sectionBookings" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <p class="breadcrumb" style="margin-bottom: 0;">MANAGEMENT PORTAL &gt; <strong>RESERVATIONS</strong></p>
+                            <div class="search-box" style="background: white; border: 1px solid #cbd5e1; border-radius: 20px; padding: 8px 15px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-solid fa-magnifying-glass" style="color: #9ca3af;"></i>
+                                <input type="text" id="searchInputBookings" placeholder="Search Booked Guest..." style="border: none; outline: none; font-size: 0.9rem; background: transparent;">
+                            </div>
+                        </div>
+                        <div id="output"></div> 
+                    </div>
+
+                    <div id="sectionRooms" style="display: none;">
+                        <div class="booking-layout">
+                            
+                            <div class="booking-form-col">
+                                <p class="breadcrumb">RESERVATIONS &gt; <strong>NEW BOOKING</strong></p>
+                                <h1 class="page-title-lux">Add New Reservation</h1>
+                                <p class="page-subtitle-lux">Register a bespoke stay for your guests. Every detail ensures the signature quiet luxury experience of Grand Savora.</p>
+
+                                <h3 class="section-heading-lux">Guest Information</h3>
+                                <div class="form-grid-2">
+                                    <div class="input-group-lux">
+                                        <label>CUSTOMER NAME</label>
+                                        <input type="text" id="customerName" placeholder="Enter guest name">
+                                    </div>
+                                    <div class="input-group-lux">
+                                        <label>CONTACT NUMBER</label>
+                                        <input type="text" id="customerPhone" placeholder="+62 800 0000 000">
+                                    </div>
+                                </div>
+
+                                <h3 class="section-heading-lux">Stay Details</h3>
+                                <div class="form-grid-2">
+                                    <div class="input-group-lux">
+                                        <label>SUITE / PROPERTY</label>
+                                        <select id="roomType">
+                                            <option value="Standard">Standard Room</option>
+                                            <option value="Deluxe">Deluxe Room</option>
+                                            <option value="Luxury Suite">Luxury Suite</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group-lux">
+                                        <label>ROOM NUMBER (1 - 520)</label>
+                                        <input type="number" id="roomNumber" placeholder="e.g. 101">
+                                    </div>
+                                </div>
+                                <div class="form-grid-2">
+                                    <div class="input-group-lux">
+                                        <label>STAY DURATION (NIGHTS)</label>
+                                        <input type="number" id="days" placeholder="How many nights?">
+                                    </div>
+                                    <input type="hidden" id="roomPrice">
+                                </div>
+
+                                <h3 class="section-heading-lux">Special Requests</h3>
+                                <div class="input-group-lux">
+                                    <textarea id="specialRequest" rows="3" placeholder="Dietary requirements, preferred arrival time, ocean-side dinner arrangement..."></textarea>
+                                </div>
+                                
+                                <button id="bookBtn" class="btn-book-now">Book Reservation</button>
+                            </div>
+
+                            <div class="booking-summary-col">
+                                <div class="summary-card">
+                                    <h4 class="summary-title">RESERVATION SUMMARY</h4>
+                                    <div class="summary-row">
+                                        <span class="summary-label">SELECTED ROOM</span>
+                                        <span class="summary-value" id="sumRoomType">Standard Room</span>
+                                    </div>
+                                    <div class="summary-grid">
+                                        <div class="summary-item">
+                                            <span class="summary-label">PRICE / NIGHT</span>
+                                            <span class="summary-value-small" id="sumPrice">Rp 2.500.000</span>
+                                        </div>
+                                        <div class="summary-item">
+                                            <span class="summary-label">STAY DURATION</span>
+                                            <span class="summary-value-small"><span id="sumDays">0</span> nights</span>
+                                        </div>
+                                    </div>
+                                    <div class="summary-total">
+                                        <span class="summary-label">TOTAL COST</span>
+                                        <span class="summary-total-value" id="sumTotal">Rp 0</span>
+                                    </div>
+                                </div>
+
+                                <div class="preview-box">
+                                    <img id="roomPreview" src="./img/standard.jpg" alt="Room Preview">
+                                    <div class="preview-overlay">
+                                        <p class="preview-badge">VIRTUAL PREVIEW</p>
+                                        <h4 class="preview-text">Inspired Coastal Living</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="sectionFood" style="display: none;">
+                        <div class="food-layout">
+                            <div class="food-menu-col">
+                                <div class="food-tabs" id="foodCategoryTabs"></div>
+                                <div class="food-grid" id="foodGridContainer"></div>
+                            </div>
+                            <div class="food-order-col">
+                                <div class="order-summary-card">
+                                    <h2 class="order-title">Current Order <span class="draft-badge">DRAFT</span></h2>
+                                    <div class="input-group-lux">
+                                        <label>ROOM OR CUSTOMER</label>
+                                        <select id="selectCustomerOrder">
+                                            <option value="">Select Room...</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group-lux" style="margin-top: 15px;">
+                                        <label>SPECIAL INSTRUCTIONS</label>
+                                        <textarea id="foodSpecialReq" rows="2" placeholder="e.g. No nuts, extra lemon..."></textarea>
+                                    </div>
+                                    <div class="order-items-list" id="orderItemsList">
+                                        <p style="text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 20px;">No items selected yet.</p>
+                                    </div>
+                                    <div class="order-calculations">
+                                        <div class="calc-row">
+                                            <span class="calc-label">Subtotal</span>
+                                            <span id="orderSubtotal">Rp 0</span>
+                                        </div>
+                                        <div class="calc-row">
+                                            <span class="calc-label">Service Fee (3%)</span>
+                                            <span id="orderServiceFee">Rp 0</span>
+                                        </div>
+                                        <div class="calc-row total">
+                                            <span class="calc-label">Total Amount</span>
+                                            <span id="orderTotalAmount">Rp 0</span>
+                                        </div>
+                                    </div>
+                                    <button id="orderFoodBtn" class="btn-place-order">PLACE ORDER</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="sectionSettings" style="display: none;">
+                        <div class="booking-form-col" style="max-width: 600px; border-radius: 8px;">
+                            <h1 class="page-title-lux">System Settings</h1>
+                            <p class="page-subtitle-lux" style="margin-bottom: 30px;">Manage your admin portal preferences.</p>
+                            
+                            <h3 class="section-heading-lux">Appearance</h3>
+                            <div class="settings-card" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                                <div>
+                                    <span style="font-weight: 600; font-size: 1.1rem; color: #0f172a;" class="dm-text">Dark Mode</span>
+                                    <p style="font-size: 0.85rem; color: #64748b; margin-top: 5px;" class="dm-subtext">Switch to a darker, eye-friendly theme.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="darkModeToggle">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
         </div>
+    </div>
 
-        <div id="output"></div>
-
+    <div id="customAlertOverlay" class="custom-alert-overlay" style="display: none;">
+        <div class="custom-alert-box">
+            <div class="custom-alert-header">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <h3>System Message</h3>
+            </div>
+            <div class="custom-alert-body">
+                <p id="customAlertMessage">Alert message goes here.</p>
+            </div>
+            <div class="custom-alert-footer">
+                <button id="customAlertOkBtn" class="btn-alert-ok">OK</button>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="script.js"></script>
+    <script src="script-dashboard.js"></script>
 
 </body>
 </html>
