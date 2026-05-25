@@ -1,104 +1,123 @@
 import { Customer } from "./Customer.js";
 import { Room } from "./Room.js";
 import { Reservation } from "./Reservation.js";
+import { Order } from "./Order.js";
+import { Food } from "./Food.js";
 
 export class HotelSystem {
-    #customers;
-    #rooms;
-    #reservations;
-    #orders;
-    #payments;
-
     constructor() {
-        this.#customers = [];
-        this.#rooms = [];
-        this.#reservations = [];
-        this.#orders = [];
-        this.#payments = [];
-        
-        // Memuat data dari memori saat sistem dijalankan
-        this.loadData();
+        this.reservations = [];
+        this.orders = [];
+        this.loadData(); // Otomatis menarik data dari memori browser saat web dibuka
     }
 
-    getAllReservations() { return [...this.#reservations]; }
-    getAllOrders() { return [...this.#orders]; }
+    getAllReservations() { return this.reservations; }
+    getAllOrders() { return this.orders; }
 
-    tambahCustomer(customer) { this.#customers.push(customer); }
-    tambahRoom(room) { this.#rooms.push(room); }
-    
     tambahReservation(reservation) {
-        this.#reservations.push(reservation);
-        reservation.konfirmasi(); 
-        this.saveData(); 
+        this.reservations.push(reservation);
+        this.saveData(); // Simpan ke browser tiap ada booking baru
     }
 
-    updateReservation(index, updatedReservation) {
-        if (index >= 0 && index < this.#reservations.length) {
-            this.#reservations[index] = updatedReservation;
-            this.saveData(); 
-        }
-    }
-
-    hapusData(index) {
-        if (index >= 0 && index < this.#reservations.length) {
-            this.#reservations[index].batalkan(); 
-            this.#reservations.splice(index, 1);
-            this.saveData(); 
+    updateReservation(index, newReservation) {
+        if(index >= 0 && index < this.reservations.length) {
+            this.reservations[index] = newReservation;
+            this.saveData();
         }
     }
 
     tambahOrder(order) {
-        this.#orders.push(order);
-        order.prosesOrder();
+        this.orders.push(order);
+        this.saveData();
     }
 
-    // ==========================================
-    // FITUR PENGELOLAAN DATA (UPDATED UNTUK GAMBAR)
-    // ==========================================
+    hapusData(index) {
+        if (index >= 0 && index < this.reservations.length) {
+            this.reservations.splice(index, 1);
+            this.saveData();
+        }
+    }
+
+    // Fungsi reset yang sudah kita bahas, sekarang ikut mereset localStorage
+    resetSemuaData() {
+        this.reservations = [];
+        this.orders = [];
+        this.saveData(); 
+    }
 
     saveData() {
-        const dataAman = this.#reservations.map(res => {
-            return {
-                idReservation: res.getIdReservation(),
-                durasi: res.getDurasi(),
-                status: res.getStatus(),
-                customer: {
-                    idUser: res.getCustomer().getIdUser(),
-                    nama: res.getCustomer().getNama(),
-                    noHP: res.getCustomer().getNoHP(),
-                    loyaltyPoints: res.getCustomer().getLoyaltyPoints()
-                },
-                room: {
-                    idRoom: res.getRoom().getIdRoom(),
-                    type: res.getRoom().getType(),
-                    price: res.getRoom().getPrice(),
-                    imageUrl: res.getRoom().getImageUrl(), // PERUBAHAN: Kini menyimpan URL gambar
-                    status: res.getRoom().getStatus()
-                }
+        try {
+            const dataToSave = {
+                reservations: this.reservations.map(res => ({
+                    idReservation: res.getIdReservation(),
+                    durasi: res.getDurasi(),
+                    customer: {
+                        idUser: res.getCustomer().getIdUser(),
+                        nama: res.getCustomer().getNama(),
+                        noHP: res.getCustomer().getNoHP()
+                        // LOYALTY POINTS SUDAH DIHAPUS DARI SINI
+                    },
+                    room: {
+                        idRoom: res.getRoom().getIdRoom(),
+                        type: res.getRoom().getType(),
+                        price: res.getRoom().getPrice(),
+                        imageUrl: res.getRoom().getImageUrl()
+                    }
+                })),
+                orders: this.orders.map(ord => ({
+                    idOrder: ord.idOrder,
+                    customer: {
+                        idUser: ord.getCustomer().getIdUser(),
+                        nama: ord.getCustomer().getNama(),
+                        noHP: ord.getCustomer().getNoHP()
+                    },
+                    items: ord.getFoods().map(item => ({
+                        food: {
+                            idFood: item.food.getIdFood(),
+                            nama: item.food.getNama(),
+                            harga: item.food.getHarga(),
+                            imageUrl: item.food.getImageUrl()
+                        },
+                        quantity: item.quantity
+                    }))
+                }))
             };
-        });
-        localStorage.setItem("DATA_RESERVASI_HOTEL", JSON.stringify(dataAman));
+            localStorage.setItem('hotelData', JSON.stringify(dataToSave));
+        } catch (error) {
+            console.error("Gagal menyimpan data:", error);
+        }
     }
 
     loadData() {
         try {
-            const dataTersimpan = localStorage.getItem("DATA_RESERVASI_HOTEL");
-            if (dataTersimpan) {
-                const parsedData = JSON.parse(dataTersimpan);
-                this.#reservations = parsedData.map(data => {
-                    const customer = new Customer(data.customer.idUser, data.customer.nama, data.customer.noHP, data.customer.loyaltyPoints);
-                    
-                    // PERUBAHAN: Mengambil gambar dari memori. Jika memori lama tidak punya gambar, gunakan Standard
-                    const img = data.room.imageUrl ? data.room.imageUrl : "./img/standard.jpg"; 
-                    
-                    const room = new Room(data.room.idRoom, data.room.type, data.room.price, img, data.room.status);
-                    return new Reservation(data.idReservation, customer, room, data.durasi, data.status);
-                });
+            const savedData = localStorage.getItem('hotelData');
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                
+                if (parsedData.reservations) {
+                    this.reservations = parsedData.reservations.map(resData => {
+                        // LOYALTY POINTS JUGA DIHAPUS DARI PEMANGGILAN INI
+                        const cust = new Customer(resData.customer.idUser, resData.customer.nama, resData.customer.noHP);
+                        const rm = new Room(resData.room.idRoom, resData.room.type, resData.room.price, resData.room.imageUrl);
+                        return new Reservation(resData.idReservation, cust, rm, resData.durasi);
+                    });
+                }
+
+                if (parsedData.orders) {
+                    this.orders = parsedData.orders.map(ordData => {
+                        const cust = new Customer(ordData.customer.idUser, ordData.customer.nama, ordData.customer.noHP);
+                        const orderItems = ordData.items.map(itemData => {
+                            const fd = new Food(itemData.food.idFood, itemData.food.nama, itemData.food.harga, itemData.food.imageUrl);
+                            return { food: fd, quantity: itemData.quantity };
+                        });
+                        return new Order(ordData.idOrder, cust, orderItems);
+                    });
+                }
             }
         } catch (error) {
-            // Menangkap error jika struktur data berubah secara drastis
-            console.warn("Format data lama terdeteksi, membersihkan memori sementara...");
-            localStorage.removeItem("DATA_RESERVASI_HOTEL");
+            console.error("Gagal memuat data:", error);
+            this.reservations = [];
+            this.orders = [];
         }
     }
 }
