@@ -723,3 +723,30 @@ if(btnResetSystem) {
 }
 
 renderReservations();
+
+// ==========================================
+    // 9. FITUR SUPPORT (INFO KELOMPOK)
+    // ==========================================
+    const btnSupport = document.getElementById('btnSupport');
+    const supportModal = document.getElementById('supportModal');
+    const closeSupportModal = document.getElementById('closeSupportModal');
+
+    if(btnSupport && supportModal && closeSupportModal) {
+        // Tampilkan modal saat menu support diklik
+        btnSupport.addEventListener('click', function(e) {
+            e.preventDefault(); 
+            supportModal.style.display = 'flex';
+        });
+
+        // Tutup modal saat tombol tutup diklik
+        closeSupportModal.addEventListener('click', function() {
+            supportModal.style.display = 'none';
+        });
+
+        // Tutup modal saat user mengklik area gelap di luar box
+        supportModal.addEventListener('click', function(e) {
+            if (e.target === supportModal) {
+                supportModal.style.display = 'none';
+            }
+        });
+    }

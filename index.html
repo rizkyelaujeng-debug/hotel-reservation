@@ -40,6 +40,46 @@
         </div>
     </div>
 
+    <div class="custom-alert-overlay" id="supportModal" style="display: none;">
+        <div class="custom-alert-box" style="max-width: 500px;">
+            <div class="custom-alert-header">
+                <i class="fas fa-users"></i> 
+                <h3>Developer Info</h3>
+            </div>
+            <div class="custom-alert-body" style="text-align: left;">
+                <h4 style="color: var(--text-heading); margin-bottom: 20px; font-family: 'Playfair Display', serif; text-align: center; line-height: 1.4;">
+                    KELOMPOK 3<br>GRAND SAVORA HOTEL & RESTO ADMIN PORTAL
+                </h4>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-input); padding-bottom: 5px;">
+                        <span>Muhammad Fariid Faqih</span>
+                        <strong>F5512510007</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-input); padding-bottom: 5px;">
+                        <span>Mohammad Rizky Laudjeng</span>
+                        <strong>F5512510019</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-input); padding-bottom: 5px;">
+                        <span>Teodorus Dwi Putra Sarungu</span>
+                        <strong>F5512510029</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-input); padding-bottom: 5px;">
+                        <span>Glennuella Mouritz Alexander Siwy</span>
+                        <strong>F5512510030</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-input); padding-bottom: 5px;">
+                        <span>Kasih Nurlianita</span>
+                        <strong>F5512510032</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="custom-alert-footer">
+                <button class="btn-alert-ok" id="closeSupportModal">Tutup</button>
+            </div>
+        </div>
+    </div>
+
     <div id="loginScreen" class="login-container">
         <div class="login-card">
             <div class="login-header">
@@ -77,7 +117,7 @@
 
                 <div class="sidebar-footer">
                     <button id="newReservationBtn" class="btn-new-reservation">NEW RESERVATION</button>
-                    <a href="#" class="menu-item-small"><i class="fa-regular fa-circle-question"></i> Support</a>
+                    <a href="#" class="menu-item-small" id="btnSupport"><i class="fa-regular fa-circle-question"></i> Support</a>
                     <a href="#" class="menu-item-small" id="logoutBtn" style="cursor: pointer;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                 </div>
             </aside>
