@@ -246,7 +246,7 @@ const foodMenuData = {
         "Fruit Platter": { price: 40000, imgUrl: "./img/fruit-platter.jpg", desc: "Seasonal fresh sliced fruits" }
     },
     "Drinks": {
-        "Mineral Water": { price: 15000, imgUrl: "./img/mineral-water.jpg", desc: "Sparkling or Still 500ml" },
+        "Mineral Water": { price: 15000, imgUrl: "./img/mineral-water.jpg", desc: "Sparkling or Still 600ml" },
         "Fresh Orange Juice": { price: 30000, imgUrl: "./img/fresh-orange-juice.jpg", desc: "100% freshly squeezed oranges" },
         "Lemon Tea": { price: 25000, imgUrl: "./img/lemon-tea.jpg", desc: "Iced tea with a splash of fresh lemon" },
         "Iced Coffee": { price: 35000, imgUrl: "./img/iced-coffee.jpg", desc: "Cold brew single origin" },
