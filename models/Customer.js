@@ -21,7 +21,7 @@ export class Customer extends User {
     }
 
     // Overriding Method display() untuk Polimorfisme
-    display() {
-        return `${super.display()} | No. HP: ${this.#noHP}`;
+    displayInfo() {
+        return `${super.displayInfo()} | No. HP: ${this.#noHP}`;
     }
 }

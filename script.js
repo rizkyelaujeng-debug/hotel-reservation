@@ -694,10 +694,12 @@ if(orderFoodBtn) {
 // ==========================================
 // 8. FITUR RESET SYSTEM (MENGGUNAKAN CUSTOM CONFIRM)
 // ==========================================
+// ==========================================
+// 8. FITUR RESET SYSTEM (MENGGUNAKAN CUSTOM CONFIRM)
+// ==========================================
 const btnResetSystem = document.getElementById("btnResetSystem");
 if(btnResetSystem) {
     btnResetSystem.addEventListener("click", () => {
-        // Gunakan layout peringatan bahaya di dalam Modal Konfirmasi
         const warningHTML = `
             <div style="text-align: center;">
                 <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: #ef4444; margin-bottom: 15px;"></i>
@@ -711,8 +713,8 @@ if(btnResetSystem) {
             historicalRevenue = 0;
             historicalCustomerCount = 0;
             
-            hotel.reservations = []; 
-            hotel.orders = [];
+            // KOREKSI: Gunakan method resmi dari HotelSystem (Enkapsulasi)
+            hotel.resetSemuaData(); 
             
             updateDashboardStats();
             renderReservations();

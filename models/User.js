@@ -28,8 +28,7 @@ export class User {
         this.#nama = nama.trim();
     }
 
-    // Method display() sesuai UML
-    display() {
+    displayInfo() {
         return `ID User: ${this.#idUser} | Nama: ${this.#nama}`;
     }
 }
