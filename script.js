@@ -694,9 +694,6 @@ if(orderFoodBtn) {
 // ==========================================
 // 8. FITUR RESET SYSTEM (MENGGUNAKAN CUSTOM CONFIRM)
 // ==========================================
-// ==========================================
-// 8. FITUR RESET SYSTEM (MENGGUNAKAN CUSTOM CONFIRM)
-// ==========================================
 const btnResetSystem = document.getElementById("btnResetSystem");
 if(btnResetSystem) {
     btnResetSystem.addEventListener("click", () => {
