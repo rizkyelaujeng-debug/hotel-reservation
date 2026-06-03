@@ -1,10 +1,8 @@
 export class User {
-    // Atribut Private sesuai UML
     #idUser;
     #nama;
 
     constructor(idUser, nama) {
-        // Simulasi Abstract Class secara profesional
         if (this.constructor === User) {
             throw new Error("Abstract class 'User' tidak boleh diinstansiasi langsung.");
         }
@@ -12,7 +10,6 @@ export class User {
         this.#nama = nama;
     }
 
-    // Getters & Setters Konvensional sesuai Method di UML
     getIdUser() {
         return this.#idUser;
     }

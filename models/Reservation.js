@@ -1,6 +1,6 @@
 export class Reservation {
     #idReservation;
-    #durasi; // Dalam hitungan hari
+    #durasi; // hari
     #status;
     #customer; // Relasi ke objek Customer
     #room;     // Relasi ke objek Room
@@ -24,7 +24,6 @@ export class Reservation {
     getCustomer() { return this.#customer; }
     getRoom() { return this.#room; }
 
-    // Bisnis Logika sesuai UML
     hitungBiaya() {
         return this.#room.getPrice() * this.#durasi;
     }

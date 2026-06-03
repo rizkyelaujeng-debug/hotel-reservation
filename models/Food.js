@@ -2,14 +2,13 @@ export class Food {
     #idFood;
     #nama;
     #harga;
-    #imageUrl; // NEW PRIVATE ATTRIBUTE
+    #imageUrl; 
 
-    // Updated constructor
     constructor(idFood, nama, harga, imageUrl) {
         this.#idFood = idFood;
         this.#nama = nama;
         this.#harga = harga;
-        this.#imageUrl = imageUrl; // Initialize
+        this.#imageUrl = imageUrl; 
     }
 
     getIdFood() { return this.#idFood; }
@@ -21,6 +20,5 @@ export class Food {
         this.#harga = harga;
     }
 
-    // GETTER for the image
     getImageUrl() { return this.#imageUrl; }
 }

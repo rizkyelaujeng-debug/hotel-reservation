@@ -38,7 +38,6 @@ export class HotelSystem {
         }
     }
 
-    // Fungsi reset yang sudah kita bahas, sekarang ikut mereset localStorage
     resetSemuaData() {
         this.reservations = [];
         this.orders = [];
@@ -55,7 +54,7 @@ export class HotelSystem {
                         idUser: res.getCustomer().getIdUser(),
                         nama: res.getCustomer().getNama(),
                         noHP: res.getCustomer().getNoHP()
-                        // LOYALTY POINTS SUDAH DIHAPUS DARI SINI
+                        
                     },
                     room: {
                         idRoom: res.getRoom().getIdRoom(),
@@ -96,7 +95,6 @@ export class HotelSystem {
                 
                 if (parsedData.reservations) {
                     this.reservations = parsedData.reservations.map(resData => {
-                        // LOYALTY POINTS JUGA DIHAPUS DARI PEMANGGILAN INI
                         const cust = new Customer(resData.customer.idUser, resData.customer.nama, resData.customer.noHP);
                         const rm = new Room(resData.room.idRoom, resData.room.type, resData.room.price, resData.room.imageUrl);
                         return new Reservation(resData.idReservation, cust, rm, resData.durasi);

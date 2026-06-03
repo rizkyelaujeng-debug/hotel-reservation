@@ -3,15 +3,15 @@ export class Room {
     #type;
     #price;
     #status;
-    #imageUrl; // NEW PRIVATE ATTRIBUTE
+    #imageUrl; 
 
-    // Updated constructor to accept imageUrl
+
     constructor(idRoom, type, price, imageUrl, status = "Tersedia") {
         this.#idRoom = idRoom;
         this.#type = type;
         this.#price = price;
         this.#status = status;
-        this.#imageUrl = imageUrl; // Initialize
+        this.#imageUrl = imageUrl; 
     }
 
     getIdRoom() { return this.#idRoom; }
@@ -29,7 +29,7 @@ export class Room {
     getStatus() { return this.#status; }
     setStatus(status) { this.#status = status; }
 
-    // GETTER for the image
+
     getImageUrl() { return this.#imageUrl; }
 
     displayRoom() {

@@ -27,10 +27,10 @@ export class Payment {
 
     prosesPembayaran() {
         if (this.#totalBayar <= 0) {
-            // TRANSLATED: Error text
+            
             throw new Error("Total payment has not been calculated or is 0.");
         }
-        // TRANSLATED: Success notification
+        
         return `Payment of Rp ${this.#totalBayar.toLocaleString('id-ID')} via ${this.#metode} successful!`;
     }
 }

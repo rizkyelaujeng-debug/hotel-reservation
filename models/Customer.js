@@ -1,7 +1,6 @@
 import { User } from "./User.js";
 
 export class Customer extends User {
-    // Atribut Private tambahan sesuai UML (tanpa loyaltyPoints)
     #noHP;
 
     constructor(idUser, nama, noHP) {
@@ -20,7 +19,6 @@ export class Customer extends User {
         this.#noHP = noHP.trim();
     }
 
-    // Overriding Method display() untuk Polimorfisme
     displayInfo() {
         return `${super.displayInfo()} | No. HP: ${this.#noHP}`;
     }

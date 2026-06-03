@@ -16,7 +16,6 @@ export class Order {
     getIdOrder() { return this.#idOrder; }
     getCustomer() { return this.#customer; } 
     getStatus() { return this.#status; }
-    // METHOD BARU: Untuk mengambil array daftar makanan
     getFoods() { return this.#foods; }
 
     hitungTotal() {
